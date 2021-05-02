@@ -1,0 +1,6 @@
+name: UnlimitedRecipe
+version: 1.0.0
+author: Alexzvn
+main: dev.alexzvn.recipe.UnlimitedRecipe
+
+api-version: 1.16
