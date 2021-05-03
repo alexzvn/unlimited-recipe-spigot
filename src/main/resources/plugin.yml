@@ -4,3 +4,8 @@ author: Alexzvn
 main: dev.alexzvn.recipe.UnlimitedRecipe
 
 api-version: 1.16
+
+commands:
+  recipe:
+    aliases: [rp]
+    descriptions: Base recipe command
