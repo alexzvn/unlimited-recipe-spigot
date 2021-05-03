@@ -2,6 +2,7 @@ package dev.alexzvn.recipe.recipe;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.logging.Level;
 import dev.alexzvn.recipe.helper.Util;
 
 public class RecipeManager {
-    protected Map<String, Recipe> recipes;
+    protected Map<String, Recipe> recipes = new HashMap<String, Recipe>();
 
     protected static RecipeManager instance;
 
