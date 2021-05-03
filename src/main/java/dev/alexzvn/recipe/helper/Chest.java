@@ -14,6 +14,10 @@ public class Chest {
         this.inv = inv;
     }
 
+    public Inventory getInventory() {
+        return inv;
+    }
+
     public ItemStack[][] rangeMatrixItemStack(int x1, int y1, int x2, int y2) {
         ItemStack[][] items = new ItemStack[Math.abs(y1 - y2) + 1][Math.abs(x1 - x2) + 1];
 
@@ -85,7 +89,7 @@ public class Chest {
     }
 
     public static int coordinateToIndex(int x, int y) {
-        return (x * y) + (x - 1) - 1;
+        return (x * y) + ((9 - x) * y) - (9 - x) - 1;
     }
 
     public static Location indexToCoordinate(int index) {
