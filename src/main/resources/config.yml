@@ -1,0 +1,11 @@
+
+message_prefix: "[&6&lUnlimitedRecipe&r] "
+
+message:
+  command_doesnt_exists: "&4Lệnh không tồn tại"
+  command_invalid: "&4Thiếu tham số"
+  command_must_send_ingame: "&4chỉ thực hiện được lệnh này trong game"
+  config_reloaded: "&aReload plugin thành công"
+  missing_permission: "&4Bạn không thể sử dụng lệnh này."
+  hand_empty: "&3Hãy giữ item trên tay để dùng lệnh này"
+  invalid_data_type: "&cTham số không hợp lệ"
