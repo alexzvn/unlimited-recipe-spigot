@@ -2,6 +2,8 @@ package dev.alexzvn.recipe.helper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 
@@ -10,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.alexzvn.recipe.UnlimitedRecipe;
@@ -91,5 +94,25 @@ public class Util {
         }
 
         return false;
+    }
+
+    public static ItemStack createItem(Material material, int amount, String name, String ...lores) {
+        ItemStack item = new ItemStack(material, amount);
+        List<String> lore = new ArrayList<String>();
+        ItemMeta meta = item.getItemMeta();
+
+        for (String string : lores) {
+            lore.add(color(string));
+        }
+
+        meta.setDisplayName(name);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public static ItemStack airItem() {
+        return new ItemStack(Material.AIR);
     }
 }
