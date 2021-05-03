@@ -12,7 +12,10 @@ import dev.alexzvn.recipe.helper.Util;
 public class RecipeManager {
     protected Map<String, Recipe> recipes;
 
+    protected static RecipeManager instance;
+
     public RecipeManager() {
+        instance = this;
         loadRecipes();
     }
 
@@ -26,6 +29,10 @@ public class RecipeManager {
                 Util.readFile(file)
             ));
         }
+    }
+
+    public int count() {
+        return recipes.size();
     }
 
     public void add(Recipe recipe) {
@@ -65,5 +72,9 @@ public class RecipeManager {
         File file = Util.file("/recipes/" + recipe.checksum() + ".json");
 
         if (file.exists()) file.delete();
+    }
+
+    public static RecipeManager getInstance() {
+        return instance;
     }
 }
