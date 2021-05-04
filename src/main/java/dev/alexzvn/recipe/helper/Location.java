@@ -15,4 +15,12 @@ public class Location {
         this.x = x;
         this.y = y;
     }
+
+    public boolean is(Location l) {
+        return l.x == x && l.y == y && l.z == z;
+    }
+
+    public boolean is(int index) {
+        return is(Chest.indexToCoordinate(index));
+    }
 }
