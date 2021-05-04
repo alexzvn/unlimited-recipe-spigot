@@ -1,6 +1,8 @@
 package dev.alexzvn.recipe.helper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.inventory.Inventory;
@@ -18,15 +20,23 @@ public class Chest {
         return inv;
     }
 
+    public ItemStack[][] rageMatrixItemStack(CoupleLocation l) {
+        return rangeMatrixItemStack(l.a.x, l.a.y, l.b.x, l.b.y);
+    }
+
     public ItemStack[][] rangeMatrixItemStack(int x1, int y1, int x2, int y2) {
-        ItemStack[][] items = new ItemStack[Math.abs(y1 - y2) + 1][Math.abs(x1 - x2) + 1];
+        ItemStack[][] items = new ItemStack[Math.abs(y1 - y2) + 1][];
 
         int[][] matrixIndexs = rangeToMatrixIndexs(x1, y1, x2, y2);
 
         for (int y = 0; y < matrixIndexs.length; y++) {
+            ItemStack[] row = new ItemStack[Math.abs(x1 - x2) + 1];
+
             for (int x = 0; x < matrixIndexs[y].length; x++) {
-                items[y][x] = slot(matrixIndexs[y][x]);
+                row[x] = slot(matrixIndexs[y][x]);
             }
+
+            items[y] = row;
         }
 
         return items;
@@ -46,8 +56,14 @@ public class Chest {
         matrixFill(items, location.x, location.y);
     }
 
+    public void matrixFill(ItemStack[][] items, Location location) {
+        matrixFill(items, location.x, location.y);
+    }
+
     public void fill(ItemStack item, int x1, int y1, int x2, int y2) {
         Set<Integer> indexs = rangeToIndexs(x1, y1, x2, y2);
+
+        item = item == null ? Util.airItem() : item;
 
         for (Integer index : indexs) {
             inv.setItem(index, item);
@@ -55,6 +71,8 @@ public class Chest {
     }
 
     public void fill(ItemStack item, int x, int y) {
+        item = item == null ? Util.airItem() : item;
+
         inv.setItem(coordinateToIndex(x, y), item);
     }
 
@@ -78,6 +96,14 @@ public class Chest {
 
     public ItemStack slot(int index) {
         return inv.getItem(index);
+    }
+
+    public ItemStack slot(Location l) {
+        return slot(l.x, l.y);
+    }
+
+    public void clear(Location location) {
+        inv.clear(coordinateToIndex(location.x, location.y));
     }
 
     public static boolean isClick(int indexSlotClicked, Location location) {
@@ -117,16 +143,19 @@ public class Chest {
         int largeY = y1 > y2 ? y1 : y2;
         int smallY = y1 < y2 ? y1 : y2;
 
-        int[][] matrixIndexs = new int[largeY - smallY + 1][largeX - smallX + 1];
+        int[][] matrixIndexs = new int[largeY - smallY + 1][];
 
-        int i = 0, j = 0;
+        int i = 0;
         for (int y = smallY; y <= largeY; y++) {
+            int j = 0;
+            int[] indexs = new int[largeX - smallX + 1];
 
             for (int x = smallX; x <= largeX; x++) {
-                matrixIndexs[i][j] = coordinateToIndex(x, y);
+                indexs[j] = coordinateToIndex(x, y);
                 j++;
             }
 
+            matrixIndexs[i] = indexs;
             i++;
         }
 
@@ -151,7 +180,9 @@ public class Chest {
     }
 
     public static ItemStack[][] trimMatrix(ItemStack[][] items) {
-        return trimMatrixX(trimMatrixY(items));
+        // return trimMatrixX(trimMatrixY(items));
+
+        return items;
     }
 
     public static ItemStack[][] trimMatrixX(ItemStack[][] items) {
@@ -172,11 +203,13 @@ public class Chest {
 
         for (int i = 0; i < items.length; i++) {
             int j = 0;
+            ItemStack[] row = new ItemStack[max - min + 1];
 
             for (int col = min; col >= 0 && col <= max; col++) {
-                compact[i][j] = items[i][col];
-                j++;
+                row[j] = items[i][col]; j++;
             }
+
+            compact[i] = row;
         }
 
         return compact;
@@ -185,6 +218,15 @@ public class Chest {
     public static ItemStack[][] trimMatrixY(ItemStack[][] items) {
         int rows = 0;
 
+        /**
+         * TODO fix index array bound
+         * 
+         * 2nd row will be ignored for example:
+         * @ @ @
+         * 
+         * @ @
+         * 
+         */
         for (ItemStack[] row : items) {
             if (Util.containItems(row)) rows++;
         }
@@ -213,5 +255,27 @@ public class Chest {
         }
 
         return true;
+    }
+
+    public static List<ItemStack> flatMatrix(ItemStack[][] items) {
+        List<ItemStack> compact = new ArrayList<ItemStack>();
+
+        for (ItemStack[] row : items) {
+            for (ItemStack item : row) {
+                compact.add(item);
+            }
+        }
+
+        return compact;
+    }
+
+    public static List<ItemStack> removeAir(List<ItemStack> items) {
+        List<ItemStack> compact = new ArrayList<ItemStack>();
+
+        for (ItemStack item : items) {
+            if (! Util.isAirItem(item)) compact.add(item);
+        }
+
+        return compact;
     }
 }
