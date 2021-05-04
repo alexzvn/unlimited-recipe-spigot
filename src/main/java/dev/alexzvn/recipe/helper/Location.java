@@ -1,9 +1,9 @@
 package dev.alexzvn.recipe.helper;
 
 public class Location {
-    public int x;
-    public int y;
-    public int z;
+    public Integer x = null;
+    public Integer y = null;
+    public Integer z = null;
 
     public Location(int x, int y, int z) {
         this.x = x;
