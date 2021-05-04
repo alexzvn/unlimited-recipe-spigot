@@ -1,5 +1,6 @@
 package dev.alexzvn.recipe.recipe;
 
+import java.util.List;
 import java.util.logging.Level;
 
 import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
@@ -45,32 +46,42 @@ public class Recipe {
         ItemStack[][] craft = this.payload.getItems();
 
         if (shaped) items = Chest.trimMatrix(items);
-
         if (items.length != craft.length) return false;
 
-        for (int y = 0; y < craft.length; y++) {
-            ItemStack[] craftRow = craft[y], itemRow = items[y];
+        for (int i = 0; i < craft.length; i++) {
+            for (int j = 0; j < craft[i].length; j++) {
+                ItemStack a = craft[i][j];
+                ItemStack b = items[i][j];
 
-            if (craftRow.length != itemRow.length) return false;
+                if (Util.isAirItem(a) && Util.isAirItem(b)) continue;
+                if (Util.isAirItem(a) || Util.isAirItem(b)) return false;
 
-            for (int x = 0; x < craftRow.length; x++) {
-                ItemStack craftItem = craftRow[x].clone(),
-                    item = itemRow[x].clone();
-
-                boolean isEnoughAmount = item.getAmount() >= craftItem.getAmount();
-
-                craftItem.setAmount(1);
-                item.setAmount(1);
-
-                boolean isSameItem = item.equals(craftItem);
-
-                if (isEnoughAmount == false || isSameItem == false) {
+                if (!compareItemContent(a, b) || !compareItemAmount(a, b)) {
+                    Util.debug("nah");
                     return false;
                 }
             }
         }
 
         return true;
+    }
+
+    protected boolean checkItem(ItemStack a, ItemStack b) {
+        if (Util.isAirItem(a) && Util.isAirItem(b)) return true;
+        if (Util.isAirItem(a) || Util.isAirItem(b)) return false;
+
+        return true;
+    }
+
+    protected boolean compareItemContent(ItemStack a, ItemStack b) {
+        a = a.clone(); a.setAmount(1);
+        b = b.clone(); b.setAmount(1);
+
+        return Util.serialize("item", a).equals(Util.serialize("item", b));
+    }
+
+    protected boolean compareItemAmount(ItemStack recipeItem, ItemStack tradeItem) {
+        return tradeItem.getAmount() >= recipeItem.getAmount();
     }
 
     /**
@@ -126,8 +137,8 @@ public class Recipe {
         }
 
         ItemCraftContract itemCraft;
-        ItemStack recipe = json.getItemStack("recipe");
-        ItemStack[][] items = (ItemStack[][]) json.get("craft");
+        ItemStack recipe = (ItemStack) json.get("recipe");
+        ItemStack[][] items = convertUnserializeCraft(json.get("craft"));
 
         if (json.getBoolean("shaped", false)) {
             itemCraft = new ItemCraftTrimed(items);
@@ -136,5 +147,29 @@ public class Recipe {
         }
 
         return new Recipe(recipe, itemCraft);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static ItemStack[][] convertUnserializeCraft(Object object) {
+        List<List<ItemStack>> items = (List<List<ItemStack>>) object;
+
+        ItemStack[][] craft = new ItemStack[items.size()][];
+
+        int i = 0;
+        for (List<ItemStack> row : items) {
+            ItemStack[] craftRow = new ItemStack[row.size()];
+            int j = 0;
+
+            for (ItemStack item : row) {
+                craftRow[j] = item;
+
+                j++;
+            }
+
+            craft[i] = craftRow;
+            i++;
+        }
+
+        return craft;
     }
 }
