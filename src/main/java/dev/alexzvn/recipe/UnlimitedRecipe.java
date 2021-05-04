@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.alexzvn.recipe.commands.CommandHandler;
 import dev.alexzvn.recipe.helper.Util;
+import dev.alexzvn.recipe.listeners.InventoryListener;
 import dev.alexzvn.recipe.recipe.RecipeManager;
 
 /**
@@ -61,7 +62,7 @@ public class UnlimitedRecipe extends JavaPlugin {
 
     protected void registerListeners() {
         Listener[] listeners = {
-            
+            new InventoryListener()
         };
 
         for (Listener listener : listeners) {
