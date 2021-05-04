@@ -10,7 +10,9 @@ import dev.alexzvn.recipe.helper.Util;
 
 public class Version extends BaseCommand {
 
-    protected String[] alias = {"ver"};
+    static {
+        alias = new String[] {"ver"};
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

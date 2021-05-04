@@ -10,7 +10,7 @@ import dev.alexzvn.recipe.helper.Config;
 abstract public class BaseCommand implements CommandContract, CommandExecutor {
     abstract protected String permission();
 
-    protected String[] alias = {};
+    protected static String[] alias = {};
 
     protected boolean validateSender(CommandSender sender) {
         if (!this.hasPermission(sender)) {
