@@ -62,6 +62,10 @@ public class Chest {
         fill(item, l.a.x, l.a.y, l.b.x, l.b.y);
     }
 
+    public void fill(ItemStack item, Location l) {
+        fill(item, l.x, l.y);
+    }
+
     public void fill(ItemStack item) {
         for (int i = 0; i < inv.getSize(); i++) {
             inv.setItem(i, item);
