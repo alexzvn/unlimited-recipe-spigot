@@ -1,16 +1,21 @@
 package dev.alexzvn.recipe.helper;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
+
+import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,25 +58,29 @@ public class Util {
     }
 
     public static String readFile(File file) {
-        String content = "";
-
         try {
-            Scanner reader = new Scanner(file);
-
-            while (reader.hasNextLine()) {
-                content.concat(reader.nextLine());
-            }
-
-            reader.close();
-
-            return content;
+            return readRawFile(file);
         }
 
-        catch (FileNotFoundException e) {
-            printError("File not found: " + file.getPath(), e);
+        catch (Exception e) {
+            logger().warning(e.getMessage());
         }
 
         return null;
+    }
+
+    public static String readRawFile(File file) throws Exception {
+        String st, content = "";
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        while ((st = br.readLine()) != null) {
+            content = content.concat(st);
+        }
+
+        br.close();
+
+        return content;
     }
 
     public static void printError(String message, Exception e) {
@@ -83,7 +92,11 @@ public class Util {
     }
 
     public static boolean isAirItem(ItemStack item) {
-        return item == null || item.getType().name().equals(Material.AIR.name());
+        if (item == null) {
+            return true;
+        }
+
+        return Material.AIR.equals(item.getType());
     }
 
     public static boolean containItems(ItemStack[] items) {
@@ -112,7 +125,48 @@ public class Util {
         return item;
     }
 
+    public static String serialize(String key, Object object) {
+        JsonConfiguration json = new JsonConfiguration();
+
+        json.set(key, object);
+
+        return json.saveToString();
+    }
+
+    public static void debug(Object object) {
+
+        logger().info(serialize("debug", object));
+    }
+
     public static ItemStack airItem() {
         return new ItemStack(Material.AIR);
+    }
+
+    public static Player humanToPlayer(HumanEntity human) {
+        return Bukkit.getPlayer(human.getName());
+    }
+
+    public static void sendPlayerItem(ItemStack item, Player player) {
+        if (isAirItem(item)) return;
+
+        Inventory inv = player.getInventory();
+
+        if (inv.firstEmpty() != -1) {
+            inv.addItem(item); return;
+        }
+
+        player.getWorld().dropItemNaturally(player.getLocation(), item);
+    }
+
+    public static void sendPlayerItems(List<ItemStack> items, Player player) {
+        items = Chest.removeAir(items);
+
+        for (ItemStack item : items) {
+            Util.sendPlayerItem(item, player);
+        }
+    }
+
+    public static void sendPlayerItems(ItemStack[][] items, Player player) {
+        sendPlayerItems(Chest.flatMatrix(items), player);
     }
 }
