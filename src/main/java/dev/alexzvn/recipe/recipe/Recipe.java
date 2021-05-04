@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import dev.alexzvn.recipe.contracts.ItemCraftContract;
@@ -56,19 +55,11 @@ public class Recipe {
                 if (Util.isAirItem(a) && Util.isAirItem(b)) continue;
                 if (Util.isAirItem(a) || Util.isAirItem(b)) return false;
 
-                if (!compareItemContent(a, b) || !compareItemAmount(a, b)) {
-                    Util.debug("nah");
-                    return false;
-                }
+                if (!compareItemContent(a, b) || !compareItemAmount(a, b)) return false;
             }
         }
 
-        return true;
-    }
-
-    protected boolean checkItem(ItemStack a, ItemStack b) {
-        if (Util.isAirItem(a) && Util.isAirItem(b)) return true;
-        if (Util.isAirItem(a) || Util.isAirItem(b)) return false;
+        Util.debug("yes yes yes");
 
         return true;
     }
@@ -90,21 +81,25 @@ public class Recipe {
      * @return itemstack matrix after trade
      */
     public ItemStack[][] deal(ItemStack[][] items) {
-        ItemStack[][] crafts = payload.getItems(),
-            deal = new ItemStack[crafts.length][];
+        ItemStack[][] crafts = payload.getItems();
+        ItemStack[][] deal = new ItemStack[crafts.length][];
 
         for (int y = 0; y < crafts.length; y++) {
-            for (int x = 0; x < crafts[y].length; x++) {
-                ItemStack craft = crafts[y][x].clone(),
-                    item = items[y][x];
+            ItemStack[] dealRow = new ItemStack[crafts[y].length];
 
-                if (item.getAmount() - craft.getAmount() < 1) {
-                    deal[y][x] = new ItemStack(Material.AIR);
-                } else {
-                    item.setAmount(item.getAmount() - craft.getAmount());
-                    deal[y][x] = item;
-                }
+            for (int x = 0; x < crafts[y].length; x++) {
+
+                ItemStack a = crafts[y][x];
+                ItemStack b = items[y][x];
+
+                if (Util.isAirItem(a) && Util.isAirItem(b)) continue;
+
+                dealRow[x] = b.clone();
+
+                dealRow[x].setAmount(b.getAmount() - a.getAmount());
             }
+
+            deal[y] = dealRow;
         }
 
         return deal;

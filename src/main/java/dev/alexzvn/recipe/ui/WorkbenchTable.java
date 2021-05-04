@@ -3,6 +3,7 @@ package dev.alexzvn.recipe.ui;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -15,6 +16,8 @@ import dev.alexzvn.recipe.helper.Location;
 import dev.alexzvn.recipe.helper.Util;
 import dev.alexzvn.recipe.recipe.Recipe;
 import dev.alexzvn.recipe.recipe.RecipeManager;
+import dev.alexzvn.recipe.task.workbench.FindRecipeWorkbenchTask;
+import dev.alexzvn.recipe.task.workbench.SetDealWorkbenchTask;
 
 public class WorkbenchTable extends Table {
 
@@ -60,6 +63,10 @@ public class WorkbenchTable extends Table {
         Location clicked = Chest.indexToCoordinate(event.getSlot());
         Player player = Util.humanToPlayer(event.getWhoClicked());
 
+        if (event.getView().getTitle() == name && event.getClick().equals(ClickType.DOUBLE_CLICK)) {
+            event.setCancelled(true);
+        }
+
         Boolean shouldIgnoreEvent = event.getView().getTitle() != name ||
             event.getSlot() != event.getRawSlot();
 
@@ -67,8 +74,6 @@ public class WorkbenchTable extends Table {
 
         boolean shouldCancelEvent = (recipeSlot.isNot(clicked) && craftSlot.notContains(clicked)) ||
             (recipeSlot.is(clicked) && ! Util.isAirItem(event.getCursor()));
-
-        shouldCancelEvent = shouldCancelEvent && InventoryType.CHEST.equals(inv.getType());
 
         if (shouldCancelEvent) event.setCancelled(true);
 
@@ -79,21 +84,18 @@ public class WorkbenchTable extends Table {
         }
 
         if (craftSlot.contains(clicked)) {
-            Recipe recipe = RecipeManager.getInstance().find(chest.rageMatrixItemStack(craftSlot));
-
-            if (recipe != null) {
-                chest.fill(recipe.getRecipe(), recipeSlot);
-            } else {
-                chest.fill(Util.airItem(), recipeSlot);
-            }
-
-            return;
+            Util.dispatchDelay(new FindRecipeWorkbenchTask(chest), 1); return;
         }
 
-        if (recipeSlot.is(clicked) && !Util.isAirItem(chest.slot(clicked))) {
-            Recipe recipe = RecipeManager.getInstance().find(chest.rageMatrixItemStack(craftSlot));
+        Recipe recipe = RecipeManager.getInstance().find(chest.rageMatrixItemStack(craftSlot));
+        if (recipeSlot.is(clicked) && recipe != null) {
+            Boolean stack = event.isShiftClick() && event.isLeftClick();
 
-            deal(recipe, chest, player, event.isShiftClick() && event.isLeftClick()); return;
+            Util.dispatchDelay(
+                new SetDealWorkbenchTask(recipe, chest, player, stack), 1
+            );
+
+            return;
         }
     }
 
@@ -111,23 +113,5 @@ public class WorkbenchTable extends Table {
         Util.sendPlayerItems(chest.rageMatrixItemStack(craftSlot), player);
     }
 
-    protected static void deal(Recipe recipe, Chest chest, Player player, boolean stack) {
-
-        ItemStack[][] craft = chest.rageMatrixItemStack(craftSlot);
-
-        craft = recipe.deal(craft);
-        Util.sendPlayerItem(recipe.getRecipe(), player);
-
-        if (stack) {
-            while (recipe.canDeal(craft)) {
-                craft = recipe.deal(craft);
-                Util.sendPlayerItem(recipe.getRecipe(), player);
-            }
-        };
-
-        if (recipe.canDeal(craft) == false) chest.clear(recipeSlot);
-
-        chest.matrixFill(craft, craftSlot.a);
-
-    }
+    
 }
