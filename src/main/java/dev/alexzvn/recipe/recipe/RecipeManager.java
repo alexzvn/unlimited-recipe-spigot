@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
+import org.bukkit.inventory.ItemStack;
+
 import dev.alexzvn.recipe.helper.Util;
 
 public class RecipeManager {
@@ -26,10 +28,19 @@ public class RecipeManager {
         for (File file : recipeFolder.listFiles()) {
             if (! file.getPath().endsWith(".json")) continue;
 
-            add(Recipe.unserialize(
-                Util.readFile(file)
-            ));
+            Recipe recipe = Recipe.unserialize(Util.readFile(file));
+
+            recipes.put(recipe.checksum(), recipe);
         }
+    }
+
+    public Recipe find(ItemStack[][] items) {
+
+        for (Recipe recipe : recipes.values()) {
+            if (recipe.canDeal(items)) return recipe;
+        }
+
+        return null;
     }
 
     public int count() {
