@@ -58,6 +58,10 @@ public class Chest {
         inv.setItem(coordinateToIndex(x, y), item);
     }
 
+    public void fill(ItemStack item, CoupleLocation l) {
+        fill(item, l.a.x, l.a.y, l.b.x, l.b.y);
+    }
+
     public void fill(ItemStack item) {
         for (int i = 0; i < inv.getSize(); i++) {
             inv.setItem(i, item);
