@@ -23,4 +23,12 @@ public class Location {
     public boolean is(int index) {
         return is(Chest.indexToCoordinate(index));
     }
+
+    public boolean isNot(Location l) {
+        return ! is(l);
+    }
+
+    public boolean isNot(int index) {
+        return ! is(index);
+    }
 }
