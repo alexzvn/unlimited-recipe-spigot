@@ -17,18 +17,21 @@ public class Recipe {
 
     protected ItemStack recipe;
 
+    protected String name;
+
     /**
      * if shaped, we only compare ignore empty space such as air slot
      */
     protected boolean shaped = true;
 
-    public Recipe(ItemStack recipe, ItemCraftContract payload, boolean sharped) {
-        this.recipe = recipe;
+    public Recipe(ItemStack recipe, ItemCraftContract payload, String name, boolean sharped) {
+        this.recipe  = recipe;
         this.payload = payload;
-        this.shaped = sharped;
+        this.shaped  = sharped;
+        this.name    = name;
     }
 
-    public Recipe(ItemStack recipe, ItemCraftContract payload) {
+    public Recipe(ItemStack recipe, ItemCraftContract payload, String name) {
         this.recipe = recipe;
         this.payload = payload;
         this.shaped = true;
@@ -43,6 +46,10 @@ public class Recipe {
      */
     public String checksum() {
         return Hash.sha1(serialize());
+    }
+
+    public String name() {
+        return name;
     }
 
     public boolean canDeal(ItemStack[][] items) {
@@ -115,6 +122,7 @@ public class Recipe {
         JsonConfiguration json = new JsonConfiguration();
 
         json.set("recipe", this.recipe);
+        json.set("name", name);
         json.getBoolean("shaped", shaped);
         json.set("craft", this.payload.getItems());
 
@@ -143,7 +151,7 @@ public class Recipe {
             itemCraft = new ItemCraft(items);
         }
 
-        return new Recipe(recipe, itemCraft);
+        return new Recipe(recipe, itemCraft, json.getString("name"));
     }
 
     @SuppressWarnings("unchecked")

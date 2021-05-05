@@ -29,11 +29,11 @@ public class ShowItemCraft implements Runnable {
 
         if (Util.isAirItem(clickedItem)) return;
 
-        String checksum  = Item.getString(clickedItem, "checksum");
+        String name  = Item.getString(clickedItem, "name");
 
-        if (checksum == null) return;
+        if (name == null) return;
 
-        Recipe recipe = RecipeManager.getInstance().get(checksum);
+        Recipe recipe = RecipeManager.getInstance().get(name);
 
         if (recipe == null) return;
 

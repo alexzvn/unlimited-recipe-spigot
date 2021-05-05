@@ -137,10 +137,10 @@ public class ListRecipeTable extends Table {
         ItemStack[] recipeItems = new ItemStack[recipes.size()];
 
         int i = 0;
-        for (String checksum : recipes.keySet()) {
-            recipeItems[i] = recipes.get(checksum).getRecipe();
+        for (String name : recipes.keySet()) {
+            recipeItems[i] = recipes.get(name).getRecipe();
             recipeItems[i].setAmount(1);
-            Item.setString(recipeItems[i], "checksum", checksum);
+            Item.setString(recipeItems[i], "name", name);
             i++;
         }
 

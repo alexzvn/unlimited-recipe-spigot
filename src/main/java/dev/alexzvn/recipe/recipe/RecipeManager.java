@@ -30,7 +30,7 @@ public class RecipeManager {
 
             Recipe recipe = Recipe.unserialize(Util.readFile(file));
 
-            recipes.put(recipe.checksum(), recipe);
+            recipes.put(recipe.name(), recipe);
         }
     }
 
@@ -48,17 +48,17 @@ public class RecipeManager {
     }
 
     public void add(Recipe recipe) {
-        recipes.put(recipe.checksum(), recipe);
+        recipes.put(recipe.name(), recipe);
         saveRecipeFile(recipe);
     }
 
     public void remove(Recipe recipe) {
-        recipes.remove(recipe.checksum());
+        recipes.remove(recipe.name());
         deleteRecipeFile(recipe);
     }
 
-    public Recipe get(String checksum) {
-        return recipes.get(checksum);
+    public Recipe get(String name) {
+        return recipes.get(name);
     }
 
     public Map<String, Recipe> getMapRecipe() {
