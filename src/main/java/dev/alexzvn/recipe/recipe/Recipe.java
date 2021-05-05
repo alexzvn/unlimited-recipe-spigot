@@ -34,6 +34,10 @@ public class Recipe {
         this.shaped = true;
     }
 
+    public ItemStack[][] getCraft() {
+        return payload.getItems();
+    }
+
     /**
      * Generate SHA-1 hash for current recipe
      */
@@ -58,8 +62,6 @@ public class Recipe {
                 if (!compareItemContent(a, b) || !compareItemAmount(a, b)) return false;
             }
         }
-
-        Util.debug("yes yes yes");
 
         return true;
     }
@@ -106,7 +108,7 @@ public class Recipe {
     }
 
     public ItemStack getRecipe() {
-        return recipe;
+        return recipe.clone();
     }
 
     public String serialize() {

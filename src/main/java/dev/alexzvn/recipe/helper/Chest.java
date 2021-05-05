@@ -1,6 +1,7 @@
 package dev.alexzvn.recipe.helper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -106,6 +107,10 @@ public class Chest {
         inv.clear(coordinateToIndex(location.x, location.y));
     }
 
+    public void clear(CoupleLocation location) {
+        fill(Util.airItem(), location);
+    }
+
     public static boolean isClick(int indexSlotClicked, Location location) {
         return isClick(indexSlotClicked, location.x, location.y);
     }
@@ -177,6 +182,24 @@ public class Chest {
         }
 
         return indexs;
+    }
+
+    public static ItemStack[][] chunk(ItemStack[] items, int length) {
+        List<ItemStack[]> chunkList = new ArrayList<ItemStack[]>();
+
+        for (int i = 0; i < items.length; i+= length) {
+            chunkList.add(
+                Arrays.copyOfRange(items, i, Math.min(items.length, i+length))
+            );
+        }
+
+        ItemStack[][] chunk = new ItemStack[chunkList.size()][length];
+
+        for (int i = 0; i < chunkList.size(); i++) {
+            chunk[i] = chunkList.get(i);
+        }
+
+        return chunk;
     }
 
     public static ItemStack[][] trimMatrix(ItemStack[][] items) {

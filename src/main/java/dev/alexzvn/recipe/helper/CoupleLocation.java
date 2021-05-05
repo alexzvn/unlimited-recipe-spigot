@@ -32,4 +32,25 @@ public class CoupleLocation {
     public boolean notContains(int x, int y) {
         return ! contains(x, y);
     }
+
+    public int acreSquare() {
+        Location max = maxLocation(a, b);
+        Location min = minLocation(a, b);
+
+        return (max.x - min.x + 1) * (max.y - min.y + 1);
+    }
+
+    public static Location maxLocation(Location a, Location b) {
+        return new Location(
+            a.x > b.x ? a.x : b.x,
+            a.y > b.y ? a.y : b.y
+        );
+    }
+
+    public static Location minLocation(Location a, Location b) {
+        return new Location(
+            a.x < b.x ? a.x : b.x,
+            a.y < b.y ? a.y : b.y
+        );
+    }
 }

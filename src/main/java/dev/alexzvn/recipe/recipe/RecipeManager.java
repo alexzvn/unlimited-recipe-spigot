@@ -57,6 +57,14 @@ public class RecipeManager {
         deleteRecipeFile(recipe);
     }
 
+    public Recipe get(String checksum) {
+        return recipes.get(checksum);
+    }
+
+    public Map<String, Recipe> getMapRecipe() {
+        return recipes;
+    }
+
     public Set<Recipe> getRecipes() {
         return new HashSet<Recipe>(recipes.values());
     }

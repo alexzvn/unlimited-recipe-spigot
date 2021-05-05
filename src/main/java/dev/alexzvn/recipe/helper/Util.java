@@ -12,6 +12,7 @@ import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -177,5 +178,13 @@ public class Util {
 
     public static void dispatchDelay(Runnable task, int tick) {
         scheduler().runTaskLaterAsynchronously(plugin(), task, tick);
+    }
+
+    public static void dispatch(Runnable task) {
+        scheduler().runTaskAsynchronously(plugin(), task);
+    }
+
+    public static NamespacedKey createNamespaceKey(String key) {
+        return new NamespacedKey(plugin(), key);
     }
 }
