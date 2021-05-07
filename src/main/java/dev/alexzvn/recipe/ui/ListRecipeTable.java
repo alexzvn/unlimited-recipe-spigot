@@ -1,6 +1,5 @@
 package dev.alexzvn.recipe.ui;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -115,19 +114,7 @@ public class ListRecipeTable extends Table {
     }
 
     public static ItemPaginator paginateRecipes(int page) {
-        ItemPaginator paginator = new ItemPaginator();
-        ItemStack[] recipes = recipeItems();
-        int size = itemSize - 1;
-        int offset = page * size;
-
-        ItemStack[] items = Arrays.copyOfRange(recipes, offset, Math.min(recipes.length, offset + size));
-
-        paginator.items = Chest.chunk(items, itemChunk);
-        paginator.next  = recipes.length - 1 > offset + size;
-        paginator.prev  = page > 0;
-        paginator.total = recipes.length;
-
-        return paginator;
+        return new ItemPaginator(recipeItems(), itemSize, itemChunk, page);
     }
 
     protected static ItemStack[] recipeItems() {
