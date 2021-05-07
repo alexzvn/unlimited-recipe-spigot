@@ -24,17 +24,25 @@ public class Recipe {
      */
     protected boolean shaped = true;
 
-    public Recipe(ItemStack recipe, ItemCraftContract payload, String name, boolean sharped) {
+    public Recipe(ItemStack recipe, ItemStack[][] payload, String name, boolean sharped) {
         this.recipe  = recipe;
-        this.payload = payload;
+        this.payload = makeItemCraft(payload);
         this.shaped  = sharped;
         this.name    = name;
     }
 
-    public Recipe(ItemStack recipe, ItemCraftContract payload, String name) {
+    public Recipe(ItemStack recipe, ItemStack[][] payload, String name) {
         this.recipe = recipe;
-        this.payload = payload;
+        this.payload = makeItemCraft(payload);
         this.shaped = true;
+    }
+
+    protected ItemCraftContract makeItemCraft(ItemStack[][] items) {
+        if (shaped) {
+            return new ItemCraftTrimed(items);
+        }
+
+        return new ItemCraft(items);
     }
 
     public ItemStack[][] getCraft() {
@@ -141,17 +149,10 @@ public class Recipe {
             return null;
         }
 
-        ItemCraftContract itemCraft;
         ItemStack recipe = (ItemStack) json.get("recipe");
         ItemStack[][] items = convertUnserializeCraft(json.get("craft"));
 
-        if (json.getBoolean("shaped", false)) {
-            itemCraft = new ItemCraftTrimed(items);
-        } else {
-            itemCraft = new ItemCraft(items);
-        }
-
-        return new Recipe(recipe, itemCraft, json.getString("name"));
+        return new Recipe(recipe, items, json.getString("name"));
     }
 
     @SuppressWarnings("unchecked")

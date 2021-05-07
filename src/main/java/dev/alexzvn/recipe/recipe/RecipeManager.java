@@ -2,6 +2,8 @@ package dev.alexzvn.recipe.recipe;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,7 +27,11 @@ public class RecipeManager {
     protected void loadRecipes() {
         File recipeFolder = Util.file("/recipes");
 
-        for (File file : recipeFolder.listFiles()) {
+        File[] files = recipeFolder.listFiles();
+
+        Arrays.sort(files, Comparator.comparing(File::lastModified));
+
+        for (File file : files) {
             if (! file.getPath().endsWith(".json")) continue;
 
             Recipe recipe = Recipe.unserialize(Util.readFile(file));
@@ -55,6 +61,10 @@ public class RecipeManager {
     public void remove(Recipe recipe) {
         recipes.remove(recipe.name());
         deleteRecipeFile(recipe);
+    }
+
+    public void remove(String name) {
+        remove(recipes.get(name));
     }
 
     public Recipe get(String name) {
