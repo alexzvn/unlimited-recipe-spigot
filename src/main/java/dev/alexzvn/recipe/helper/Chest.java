@@ -128,7 +128,7 @@ public class Chest {
     }
 
     public static int coordinateToIndex(int x, int y) {
-        return (x * y) + ((9 - x) * y) - (9 - x) - 1;
+        return (9 * y) + x - 9 - 1;
     }
 
     public static Location indexToCoordinate(int index) {
