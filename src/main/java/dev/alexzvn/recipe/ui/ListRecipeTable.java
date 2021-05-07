@@ -57,7 +57,6 @@ public class ListRecipeTable extends Table {
             yellowPane = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE),
             barrier = new ItemStack(Material.BARRIER),
             workbench = new ItemStack(Material.CRAFTING_TABLE),
-            
             air = Util.airItem();
 
         // fill background
