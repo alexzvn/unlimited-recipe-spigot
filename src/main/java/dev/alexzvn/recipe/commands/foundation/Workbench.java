@@ -9,10 +9,6 @@ import dev.alexzvn.recipe.ui.WorkbenchTable;
 
 public class Workbench extends BaseCommand {
 
-    static {
-        alias = new String[] {"wb"};
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
@@ -33,5 +29,10 @@ public class Workbench extends BaseCommand {
     @Override
     protected String permission() {
         return "";
+    }
+
+    @Override
+    public String[] getAlias() {
+        return new String[] {"wb"};
     }
 }

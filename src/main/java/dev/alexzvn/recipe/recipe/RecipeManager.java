@@ -2,8 +2,6 @@ package dev.alexzvn.recipe.recipe;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,6 +10,7 @@ import java.util.logging.Level;
 
 import org.bukkit.inventory.ItemStack;
 
+import dev.alexzvn.recipe.helper.Item;
 import dev.alexzvn.recipe.helper.Util;
 
 public class RecipeManager {
@@ -28,8 +27,6 @@ public class RecipeManager {
         File recipeFolder = Util.file("/recipes");
 
         File[] files = recipeFolder.listFiles();
-
-        Arrays.sort(files, Comparator.comparing(File::lastModified));
 
         for (File file : files) {
             if (! file.getPath().endsWith(".json")) continue;
@@ -77,6 +74,24 @@ public class RecipeManager {
 
     public Set<Recipe> getRecipes() {
         return new HashSet<Recipe>(recipes.values());
+    }
+
+    public ItemStack[] getNamedRecipes() {
+        ItemStack[] recipeItems = new ItemStack[recipes.size()];
+
+        int i = 0;
+        for (String name : recipes.keySet()) {
+            if (! recipes.containsKey(name)) {
+                continue;
+            }
+
+            recipeItems[i] = recipes.get(name).getRecipe();
+            recipeItems[i].setAmount(1);
+            Item.setString(recipeItems[i], "name", name);
+            i++;
+        }
+
+        return recipeItems;
     }
 
     protected void saveRecipeFile(Recipe recipe) {

@@ -9,3 +9,11 @@ commands:
   recipe:
     aliases: [rp]
     descriptions: Base recipe command
+
+permissions:
+  recipe.admin:
+    description: Gives access to everything!
+    children:
+      recipe.admin.show: true
+      recipe.admin.edit: true
+      recipe.admin.create: true

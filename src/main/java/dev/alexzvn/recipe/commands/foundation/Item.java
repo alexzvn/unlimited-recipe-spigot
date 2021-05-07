@@ -2,22 +2,29 @@ package dev.alexzvn.recipe.commands.foundation;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import dev.alexzvn.recipe.commands.BaseCommand;
+import dev.alexzvn.recipe.ui.ListRecipeTable;
 
-public class List extends BaseCommand {
+public class Item extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (! validateSender(sender)) {
+            return false;
+        }
 
-        if (! this.validateSender(sender)) return false;
+        ((Player) sender).openInventory(
+            new ListRecipeTable().getInventory()
+        );
 
-        return false;
+        return true;
     }
 
     @Override
     public String getName() {
-        return "all";
+        return "items";
     }
 
     @Override

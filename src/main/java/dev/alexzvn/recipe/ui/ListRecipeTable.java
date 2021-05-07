@@ -1,7 +1,5 @@
 package dev.alexzvn.recipe.ui;
 
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,12 +10,9 @@ import org.bukkit.inventory.ItemStack;
 
 import dev.alexzvn.recipe.helper.Chest;
 import dev.alexzvn.recipe.helper.CoupleLocation;
-import dev.alexzvn.recipe.helper.Item;
 import dev.alexzvn.recipe.helper.ItemPaginator;
 import dev.alexzvn.recipe.helper.Location;
 import dev.alexzvn.recipe.helper.Util;
-import dev.alexzvn.recipe.recipe.Recipe;
-import dev.alexzvn.recipe.recipe.RecipeManager;
 import dev.alexzvn.recipe.task.recipetable.ChangePageTable;
 import dev.alexzvn.recipe.task.recipetable.PaginationItemTable;
 import dev.alexzvn.recipe.task.recipetable.ShowItemCraft;
@@ -115,21 +110,5 @@ public class ListRecipeTable extends Table {
 
     public static ItemPaginator paginateRecipes(int page) {
         return new ItemPaginator(recipeItems(), itemSize, itemChunk, page);
-    }
-
-    protected static ItemStack[] recipeItems() {
-        Map<String, Recipe> recipes = RecipeManager.getInstance().getMapRecipe();
-
-        ItemStack[] recipeItems = new ItemStack[recipes.size()];
-
-        int i = 0;
-        for (String name : recipes.keySet()) {
-            recipeItems[i] = recipes.get(name).getRecipe();
-            recipeItems[i].setAmount(1);
-            Item.setString(recipeItems[i], "name", name);
-            i++;
-        }
-
-        return recipeItems;
     }
 }

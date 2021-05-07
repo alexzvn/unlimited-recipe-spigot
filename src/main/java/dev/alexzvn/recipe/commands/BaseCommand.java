@@ -8,9 +8,6 @@ import dev.alexzvn.recipe.contracts.CommandContract;
 import dev.alexzvn.recipe.helper.Config;
 
 abstract public class BaseCommand implements CommandContract, CommandExecutor {
-    abstract protected String permission();
-
-    protected static String[] alias = {};
 
     protected boolean validateSender(CommandSender sender) {
         if (!this.hasPermission(sender)) {
@@ -42,6 +39,8 @@ abstract public class BaseCommand implements CommandContract, CommandExecutor {
         sender.sendMessage(Config.message("command_must_send_ingame"));
     }
 
+    abstract protected String permission();
+
     protected boolean isPlayer(CommandSender sender) {
         return sender instanceof Player;
     }
@@ -51,6 +50,6 @@ abstract public class BaseCommand implements CommandContract, CommandExecutor {
     }
 
     public String[] getAlias() {
-        return alias;
+        return new String[] {};
     }
 }

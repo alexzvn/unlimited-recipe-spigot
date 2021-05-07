@@ -31,4 +31,8 @@ public class Location {
     public boolean isNot(int index) {
         return ! is(index);
     }
+
+    public boolean in(CoupleLocation location) {
+        return location.contains(this);
+    }
 }

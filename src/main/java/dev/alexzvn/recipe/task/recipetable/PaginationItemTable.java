@@ -35,7 +35,6 @@ public class PaginationItemTable implements Runnable {
 
         ItemStack item = new ItemStack(Material.RED_SHULKER_BOX);
 
-        
         Item.setName(item, "&lLùi");
         Item.setInt(item, "page", page - 1);
 

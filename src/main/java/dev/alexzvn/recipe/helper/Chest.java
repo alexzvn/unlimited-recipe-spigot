@@ -43,6 +43,10 @@ public class Chest {
         return items;
     }
 
+    public ItemStack[][] rangeMatrixItemStack(CoupleLocation l) {
+        return rangeMatrixItemStack(l.a.x, l.a.y, l.b.x, l.b.y);
+    }
+
     public void matrixFill(ItemStack[][] items, int x, int y) {
         for (int y1 = 0; y1 < items.length; y1++) {
             for (int x1 = 0; x1 < items[y1].length; x1++) {
@@ -109,6 +113,10 @@ public class Chest {
 
     public void clear(CoupleLocation location) {
         fill(Util.airItem(), location);
+    }
+
+    public boolean hasItemAt(Location location) {
+        return Util.isAirItem(slot(location));
     }
 
     public static boolean isClick(int indexSlotClicked, Location location) {
