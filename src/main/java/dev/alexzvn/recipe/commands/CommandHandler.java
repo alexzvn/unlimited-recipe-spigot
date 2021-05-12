@@ -8,14 +8,19 @@ import java.util.Set;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
+import dev.alexzvn.recipe.commands.admin.Create;
+import dev.alexzvn.recipe.commands.admin.Edit;
+import dev.alexzvn.recipe.commands.admin.Show;
+import dev.alexzvn.recipe.commands.foundation.Item;
 import dev.alexzvn.recipe.commands.foundation.Workbench;
 import dev.alexzvn.recipe.commands.plugin.*;
 import dev.alexzvn.recipe.contracts.CommandContract;
 import dev.alexzvn.recipe.helper.Config;
 import dev.alexzvn.recipe.helper.Util;
 
-public class CommandHandler implements CommandExecutor {
+public class CommandHandler implements CommandExecutor, TabCompleter {
     private static HashMap<String, CommandContract> commands = new HashMap<String, CommandContract>();
 
     public CommandHandler() {
@@ -85,11 +90,39 @@ public class CommandHandler implements CommandExecutor {
     public void registerCommands() {
 
         CommandContract[] cmds = {
+            new Create(),
+            new Edit(),
+            new Show(),
+
+            new Item(),
             new Workbench(),
 
             new Version()
         };
 
         registerAll(cmds);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length < 1) {
+            return new ArrayList<String>(commands.keySet());
+        }
+
+        if (! commands.containsKey(command.getName())) {
+            return new ArrayList<String>();
+        }
+
+        CommandContract cmd = commands.get(command.getName());
+
+        String label = args[0];
+
+        String[] newArgs = new String[args.length -1];
+
+        for (int i = 1; i < args.length; i++) {
+            newArgs[i -1]= args[i];
+        }
+
+        return cmd.onTabComplete(sender, command, label, newArgs);
     }
 }
