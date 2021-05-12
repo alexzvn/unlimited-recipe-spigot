@@ -2,8 +2,10 @@ package dev.alexzvn.recipe.recipe;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -38,6 +40,10 @@ public class RecipeManager {
 
             recipes.put(recipe.name(), recipe);
         }
+    }
+
+    public List<String> getNames() {
+        return new ArrayList<String>(recipes.keySet());
     }
 
     public Recipe find(ItemStack[][] items) {
