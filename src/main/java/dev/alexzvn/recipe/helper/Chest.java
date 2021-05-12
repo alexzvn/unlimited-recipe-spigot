@@ -193,18 +193,16 @@ public class Chest {
     }
 
     public static ItemStack[][] chunk(ItemStack[] items, int length) {
-        List<ItemStack[]> chunkList = new ArrayList<ItemStack[]>();
+        ItemStack[][] chunk = new ItemStack[
+            (int) Math.ceil((double) items.length / length)
+        ][];
+
+        Util.debug(items.length);
+        Util.debug(Math.ceil(items.length / length));
+        Util.debug(length);
 
         for (int i = 0; i < items.length; i+= length) {
-            chunkList.add(
-                Arrays.copyOfRange(items, i, Math.min(items.length, i+length))
-            );
-        }
-
-        ItemStack[][] chunk = new ItemStack[chunkList.size()][length];
-
-        for (int i = 0; i < chunkList.size(); i++) {
-            chunk[i] = chunkList.get(i);
+            chunk[i] = Arrays.copyOfRange(items, i, Math.min(items.length, i+length));
         }
 
         return chunk;
