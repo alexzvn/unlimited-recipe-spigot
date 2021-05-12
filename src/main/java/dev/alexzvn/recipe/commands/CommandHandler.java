@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import dev.alexzvn.recipe.commands.admin.Create;
+import dev.alexzvn.recipe.commands.admin.Delete;
 import dev.alexzvn.recipe.commands.admin.Edit;
 import dev.alexzvn.recipe.commands.admin.Show;
 import dev.alexzvn.recipe.commands.foundation.Item;
@@ -93,6 +94,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             new Create(),
             new Edit(),
             new Show(),
+            new Delete(),
 
             new Item(),
             new Workbench(),

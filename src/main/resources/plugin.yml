@@ -16,4 +16,5 @@ permissions:
     children:
       recipe.admin.show: true
       recipe.admin.edit: true
+      recipe.admin.delete: true
       recipe.admin.create: true
