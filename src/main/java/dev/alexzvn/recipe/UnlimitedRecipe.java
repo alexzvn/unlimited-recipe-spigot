@@ -57,7 +57,10 @@ public class UnlimitedRecipe extends JavaPlugin {
     }
 
     protected void registerCommands() {
-        this.getCommand("recipe").setExecutor(new CommandHandler());
+        CommandHandler handler = new CommandHandler();
+
+        this.getCommand("recipe").setExecutor(handler);
+        this.getCommand("recipe").setTabCompleter(handler);
     }
 
     protected void registerListeners() {
