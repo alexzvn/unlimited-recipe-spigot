@@ -31,7 +31,10 @@ public class RecipeManager {
         for (File file : files) {
             if (! file.getPath().endsWith(".json")) continue;
 
-            Recipe recipe = Recipe.unserialize(Util.readFile(file));
+            Recipe recipe = Recipe.unserialize(
+                Util.readFile(file),
+                file.getName().replace(".json", "")
+            );
 
             recipes.put(recipe.name(), recipe);
         }
@@ -81,10 +84,6 @@ public class RecipeManager {
 
         int i = 0;
         for (String name : recipes.keySet()) {
-            if (! recipes.containsKey(name)) {
-                continue;
-            }
-
             recipeItems[i] = recipes.get(name).getRecipe();
             recipeItems[i].setAmount(1);
             Item.setString(recipeItems[i], "name", name);
@@ -95,7 +94,7 @@ public class RecipeManager {
     }
 
     protected void saveRecipeFile(Recipe recipe) {
-        File file = Util.file("/recipes/" + recipe.checksum() + ".json");
+        File file = Util.file("/recipes/" + recipe.name() + ".json");
 
         if (file.exists()) file.delete();
 
@@ -114,7 +113,7 @@ public class RecipeManager {
     }
 
     protected void deleteRecipeFile(Recipe recipe) {
-        File file = Util.file("/recipes/" + recipe.checksum() + ".json");
+        File file = Util.file("/recipes/" + recipe.name() + ".json");
 
         if (file.exists()) file.delete();
     }

@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import dev.alexzvn.recipe.contracts.ItemCraftContract;
 import dev.alexzvn.recipe.helper.Chest;
-import dev.alexzvn.recipe.helper.Hash;
 import dev.alexzvn.recipe.helper.Util;
 
 public class Recipe {
@@ -35,6 +34,7 @@ public class Recipe {
         this.recipe = recipe;
         this.payload = makeItemCraft(payload);
         this.shaped = true;
+        this.name = name;
     }
 
     protected ItemCraftContract makeItemCraft(ItemStack[][] items) {
@@ -47,13 +47,6 @@ public class Recipe {
 
     public ItemStack[][] getCraft() {
         return payload.getItems();
-    }
-
-    /**
-     * Generate SHA-1 hash for current recipe
-     */
-    public String checksum() {
-        return Hash.sha1(serialize());
     }
 
     public String name() {
@@ -130,14 +123,13 @@ public class Recipe {
         JsonConfiguration json = new JsonConfiguration();
 
         json.set("recipe", this.recipe);
-        json.set("name", name);
         json.getBoolean("shaped", shaped);
         json.set("craft", this.payload.getItems());
 
         return json.saveToString();
     }
 
-    public static Recipe unserialize(String contents) {
+    public static Recipe unserialize(String contents, String name) {
         JsonConfiguration json = new JsonConfiguration();
 
         try {
@@ -152,7 +144,7 @@ public class Recipe {
         ItemStack recipe = (ItemStack) json.get("recipe");
         ItemStack[][] items = convertUnserializeCraft(json.get("craft"));
 
-        return new Recipe(recipe, items, json.getString("name"));
+        return new Recipe(recipe, items, name);
     }
 
     @SuppressWarnings("unchecked")
