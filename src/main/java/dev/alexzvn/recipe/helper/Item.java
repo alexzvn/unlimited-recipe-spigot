@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public class Item {
 
@@ -26,7 +27,7 @@ public class Item {
         item.setItemMeta(meta);
     }
 
-    public static void setString(ItemStack item, String key, String value) {
+    public static void setString(@NotNull ItemStack item, @NotNull String key, @NotNull String value) {
         NamespacedKey namespace = Util.createNamespaceKey(key);
 
         ItemMeta meta = item.getItemMeta();
