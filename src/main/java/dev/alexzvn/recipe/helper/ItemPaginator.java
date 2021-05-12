@@ -30,8 +30,9 @@ public class ItemPaginator {
         this.currentPage = page;
         this.rawItems = items;
         this.perPage = perPage;
-        this.offset = page * perPage - 1;
+        this.offset = page * (perPage - 1);
         this.total = rawItems.length;
+        this.perRow = perRow;
 
         init();
     }
