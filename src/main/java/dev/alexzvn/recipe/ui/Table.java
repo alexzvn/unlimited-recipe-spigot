@@ -23,7 +23,7 @@ abstract public class Table {
         return chest.getInventory();
     }
 
-    abstract public void createUI();
+    public void createUI() {};
 
     public static boolean isCurrentInventory(int slot, int rawSlot) {
         return slot == rawSlot;

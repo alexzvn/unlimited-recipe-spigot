@@ -24,7 +24,7 @@ public class EditRecipeTable extends NewRecipeTable {
     }
 
     @Override
-    public void createUI() {
+    public void createNamedUI() {
         chest = new Chest(Bukkit.createInventory(null, 3*9, name));
 
         super.createUI();

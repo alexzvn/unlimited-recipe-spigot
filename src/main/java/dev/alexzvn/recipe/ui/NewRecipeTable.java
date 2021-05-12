@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import dev.alexzvn.recipe.helper.Chest;
 import dev.alexzvn.recipe.helper.CoupleLocation;
@@ -29,16 +30,17 @@ public class NewRecipeTable extends Table {
 
     public static final Location saveSlot = new Location(1, 1);
 
-    protected String recipeName;
+    protected String recipe;
 
-    public NewRecipeTable(String recipeName) {
+    public NewRecipeTable(@NotNull String recipeName) {
         super();
 
-        this.recipeName = recipeName;
+        this.recipe = recipeName;
+
+        createNamedUI();
     }
 
-    @Override
-    public void createUI() {
+    public void createNamedUI() {
         if (chest == null) {
             chest = new Chest(Bukkit.createInventory(null, 3*9, name));
         }
@@ -49,7 +51,7 @@ public class NewRecipeTable extends Table {
             air = Util.airItem();
 
         Item.setName(ironBlock, "&lLưu lại");
-        Item.setString(ironBlock, "recipe.name", recipeName);
+        Item.setString(ironBlock, "name", recipe);
 
         chest.fill(blackPane, blackPaneSlots);
         chest.fill(brownPane, brownPaneSlots);
@@ -65,14 +67,14 @@ public class NewRecipeTable extends Table {
         Chest chest = new Chest(event.getInventory());
         Location clicked = Chest.indexToCoordinate(event.getSlot());
 
-        if (! (clicked.in(craftSlots) && clicked.is(recipeSlot) && isInventory)) {
+        if (isInventory && (recipeSlot.isNot(clicked) && !craftSlots.contains(clicked)) ) {
             event.setCancelled(true);
         }
 
-        if (! saveSlot.is(clicked)) return;
-
-        if (chest.hasItemAt(recipeSlot) && containCraft(chest)) {
+        if (saveSlot.is(clicked)) {
             saveRecipe(chest);
+            event.getWhoClicked().closeInventory();
+            return;
         }
     }
 
@@ -115,6 +117,6 @@ public class NewRecipeTable extends Table {
     public static String getRecipeName(ItemStack item) {
         if (item == null) return null;
 
-        return Item.getString(item, "recipe.name");
+        return Item.getString(item, "name");
     }
 }
