@@ -17,13 +17,12 @@ public class Create extends BaseCommand{
             return false;
         }
 
-        String recipe = args[0];
-
-        if (recipe == null) {
+        if (args.length < 1) {
             alertInvalidCommand(sender);
             return false;
         }
 
+        String recipe = args[0];
         RecipeManager manager = RecipeManager.getInstance();
 
         if (manager.getMapRecipe().containsKey(recipe)) {
