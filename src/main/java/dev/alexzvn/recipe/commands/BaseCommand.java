@@ -1,5 +1,9 @@
 package dev.alexzvn.recipe.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,5 +55,9 @@ abstract public class BaseCommand implements CommandContract, CommandExecutor {
 
     public String[] getAlias() {
         return new String[] {};
+    }
+
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return new ArrayList<String>();
     }
 }
