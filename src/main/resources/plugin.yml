@@ -3,7 +3,7 @@ version: 1.0.0
 author: Alexzvn
 main: dev.alexzvn.recipe.UnlimitedRecipe
 
-api-version: 1.16
+api-version: 1.14
 
 commands:
   recipe:
