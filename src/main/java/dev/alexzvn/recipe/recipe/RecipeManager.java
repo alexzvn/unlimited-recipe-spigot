@@ -1,7 +1,6 @@
 package dev.alexzvn.recipe.recipe;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,11 +105,8 @@ public class RecipeManager {
 
         try {
             file.createNewFile();
-            PrintWriter writer =  new PrintWriter(file, "UTF-8");
 
-            writer.write(recipe.serialize());
-
-            writer.close();
+            Util.writeFile(file, recipe.serialize());
         }
 
         catch (Exception e) {

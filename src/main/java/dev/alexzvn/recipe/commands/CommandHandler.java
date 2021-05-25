@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Entity;
 
 import dev.alexzvn.recipe.commands.admin.Create;
 import dev.alexzvn.recipe.commands.admin.Delete;
@@ -68,7 +69,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (args.length < 1) {
-            sender.sendMessage(Util.color("[&6&lUnlimitedRecipe&r] &aDevelopment by &6HlV&a for &6&lMythicwolf.net"));
+            Util.tell((Entity) sender, "&aDevelopment by &6HlV");
             return false;
         }
 

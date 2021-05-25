@@ -74,6 +74,7 @@ public class NewRecipeTable extends Table {
         if (saveSlot.is(clicked)) {
             saveRecipe(chest);
             event.getWhoClicked().closeInventory();
+            Util.tell(event.getWhoClicked(), "&aĐã lưu lại recipe");
             return;
         }
     }

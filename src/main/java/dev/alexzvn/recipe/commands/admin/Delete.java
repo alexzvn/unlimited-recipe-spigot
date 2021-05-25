@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import dev.alexzvn.recipe.commands.BaseCommand;
 import dev.alexzvn.recipe.helper.Util;
@@ -27,7 +28,7 @@ public class Delete extends BaseCommand {
         RecipeManager manager = RecipeManager.getInstance();
 
         if (! manager.getMapRecipe().containsKey(recipe)) {
-            sender.sendMessage(Util.color("&e Recipe đã có trong hệ thống"));
+            Util.tell((Player) sender, "&e Recipe đã có trong hệ thống");
             return false;
         }
 
