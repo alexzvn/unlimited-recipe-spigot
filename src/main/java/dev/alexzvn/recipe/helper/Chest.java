@@ -197,10 +197,6 @@ public class Chest {
             (int) Math.ceil((double) items.length / length)
         ][];
 
-        Util.debug(items.length); // 15
-        Util.debug(Math.ceil(items.length / length)); // 3.0
-        Util.debug(length); // 4
-
         int j = 0;
         for (int i = 0; i < items.length; i+= length) {
             chunk[j++] = Arrays.copyOfRange(items, i, Math.min(items.length, i+length));
