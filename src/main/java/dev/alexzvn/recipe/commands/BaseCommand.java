@@ -14,7 +14,7 @@ import dev.alexzvn.recipe.helper.Config;
 abstract public class BaseCommand implements CommandContract, CommandExecutor {
 
     protected boolean validateSender(CommandSender sender) {
-        if (!this.hasPermission(sender)) {
+        if (! this.hasPermission(sender)) {
             this.alertPermissionRequired(sender);
             return false;
         }
@@ -28,7 +28,7 @@ abstract public class BaseCommand implements CommandContract, CommandExecutor {
     }
 
     protected boolean hasPermission(CommandSender sender) {
-        return sender.hasPermission(this.permission());
+        return permission() != null && sender.hasPermission(permission());
     }
 
     protected void alertInvalidCommand(CommandSender sender) {

@@ -28,7 +28,7 @@ public class Workbench extends BaseCommand {
 
     @Override
     protected String permission() {
-        return "";
+        return null;
     }
 
     @Override
