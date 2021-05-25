@@ -1,18 +1,21 @@
 package dev.alexzvn.recipe.helper;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 
 import com.dumptruckman.bukkit.configuration.json.JsonConfiguration;
+import com.google.common.io.Files;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -39,7 +42,13 @@ public class Util {
     }
 
     public static void bc(String message) {
-        Bukkit.broadcastMessage(message);
+        Bukkit.broadcastMessage(color(message));
+    }
+
+    public static void tell(Entity entity, String message) {
+        message = color(Config.config().getString("message_prefix") + message);
+
+        entity.sendMessage(message);
     }
 
     /**
@@ -60,29 +69,37 @@ public class Util {
     }
 
     public static String readFile(File file) {
+        String content = "";
+
         try {
-            return readRawFile(file);
+            List<String> list = Files.readLines(file, StandardCharsets.UTF_8);
+
+            for (String text : list) {
+                content += text;
+            }
+
+            return content;
         }
 
         catch (Exception e) {
-            logger().warning(e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public static String readRawFile(File file) throws Exception {
-        String st, content = "";
+    public static void writeFile(File file, String content) {
+        try {
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
+            writer.write(content);
 
-        while ((st = br.readLine()) != null) {
-            content = content.concat(st);
+            writer.close();
         }
 
-        br.close();
-
-        return content;
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void printError(String message, Exception e) {
@@ -186,5 +203,13 @@ public class Util {
 
     public static NamespacedKey createNamespaceKey(String key) {
         return new NamespacedKey(plugin(), key);
+    }
+
+    public static String base64_encode(String text) {
+        return Base64.getEncoder().encodeToString(text.getBytes());
+    }
+
+    public static String base64_decode(String text) {
+        return new String(Base64.getDecoder().decode(text.getBytes()));
     }
 }
