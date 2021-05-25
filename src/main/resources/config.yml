@@ -1,5 +1,5 @@
 
-message_prefix: "[&6&lUnlimitedRecipe&r] "
+message_prefix: "[&6&lUnlimitedRecipeLegacy&r] "
 
 message:
   command_doesnt_exists: "&4Lệnh không tồn tại"

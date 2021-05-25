@@ -91,7 +91,7 @@ public class RecipeManager {
         for (String name : recipes.keySet()) {
             recipeItems[i] = recipes.get(name).getRecipe();
             recipeItems[i].setAmount(1);
-            Item.setString(recipeItems[i], "name", name);
+            recipeItems[i] = Item.setString(recipeItems[i], "name", name);
             i++;
         }
 

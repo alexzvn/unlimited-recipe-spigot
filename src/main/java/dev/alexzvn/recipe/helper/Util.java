@@ -14,7 +14,6 @@ import com.google.common.io.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -25,12 +24,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import dev.alexzvn.recipe.UnlimitedRecipe;
+import dev.alexzvn.recipe.UnlimitedRecipeLegacy;
 
 public class Util {
 
     public static JavaPlugin plugin() {
-        return UnlimitedRecipe.getInstance();
+        return UnlimitedRecipeLegacy.getInstance();
     }
 
     public static java.util.logging.Logger logger() {
@@ -199,10 +198,6 @@ public class Util {
 
     public static void dispatch(Runnable task) {
         scheduler().runTaskAsynchronously(plugin(), task);
-    }
-
-    public static NamespacedKey createNamespaceKey(String key) {
-        return new NamespacedKey(plugin(), key);
     }
 
     public static String base64_encode(String text) {

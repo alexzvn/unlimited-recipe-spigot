@@ -1,9 +1,10 @@
-name: UnlimitedRecipe
+name: UnlimitedRecipeLegacyLegacy
 version: 1.0.0
 author: Alexzvn
-main: dev.alexzvn.recipe.UnlimitedRecipe
+main: dev.alexzvn.recipe.UnlimitedRecipeLegacy
+depend: [NBTAPI]
 
-api-version: 1.14
+api-version: 1.10
 
 commands:
   recipe:

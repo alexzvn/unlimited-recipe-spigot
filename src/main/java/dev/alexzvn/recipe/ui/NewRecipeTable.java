@@ -45,13 +45,13 @@ public class NewRecipeTable extends Table {
             chest = new Chest(Bukkit.createInventory(null, 3*9, name));
         }
 
-        ItemStack blackPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE),
-            brownPane = new ItemStack(Material.BROWN_STAINED_GLASS_PANE),
+        ItemStack blackPane = new ItemStack(Material.STAINED_GLASS_PANE),
+            brownPane = new ItemStack(Material.STAINED_GLASS_PANE),
             ironBlock = new ItemStack(Material.IRON_BLOCK),
             air = Util.airItem();
 
         Item.setName(ironBlock, "&lLưu lại");
-        Item.setString(ironBlock, "name", recipe);
+        ironBlock = Item.setString(ironBlock, "name", recipe);
 
         chest.fill(blackPane, blackPaneSlots);
         chest.fill(brownPane, brownPaneSlots);

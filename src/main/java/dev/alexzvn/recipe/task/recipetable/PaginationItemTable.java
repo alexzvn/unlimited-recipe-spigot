@@ -33,10 +33,10 @@ public class PaginationItemTable implements Runnable {
     protected ItemStack getPrevItem(boolean shouldExists) {
         if (! shouldExists) return Util.airItem();
 
-        ItemStack item = new ItemStack(Material.RED_SHULKER_BOX);
+        ItemStack item = new ItemStack(Material.REDSTONE_BLOCK);
 
         Item.setName(item, "&lLùi");
-        Item.setInt(item, "page", page - 1);
+        item = Item.setInt(item, "page", page - 1);
 
         return item;
     }
@@ -44,10 +44,10 @@ public class PaginationItemTable implements Runnable {
     protected ItemStack getNextItem(boolean shouldExists) {
         if (! shouldExists) return Util.airItem();
 
-        ItemStack item = new ItemStack(Material.WHITE_SHULKER_BOX);
+        ItemStack item = new ItemStack(Material.IRON_BLOCK);
 
         Item.setName(item, "&lTiến");
-        Item.setInt(item, "page", page + 1);
+        item = Item.setInt(item, "page", page + 1);
 
         return item;
     }

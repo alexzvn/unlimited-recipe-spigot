@@ -47,10 +47,10 @@ public class ListRecipeTable extends Table {
     public void createUI() {
         chest = new Chest(Bukkit.createInventory(null, 9*6, name));
 
-        ItemStack blackPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE),
-            yellowPane = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE),
+        ItemStack blackPane = new ItemStack(Material.STAINED_GLASS_PANE),
+            yellowPane = new ItemStack(Material.STAINED_GLASS_PANE),
             barrier = new ItemStack(Material.BARRIER),
-            workbench = new ItemStack(Material.CRAFTING_TABLE),
+            workbench = new ItemStack(Material.WORKBENCH),
             air = Util.airItem();
 
         // fill background

@@ -37,10 +37,10 @@ public class ShowRecipeEditTable extends Table {
     public void createUI() {
         chest = new Chest(Bukkit.createInventory(null, 6*9, name));
 
-        ItemStack bluePane = new ItemStack(Material.BLUE_STAINED_GLASS_PANE),
+        ItemStack bluePane = new ItemStack(Material.STAINED_GLASS_PANE),
             close = new ItemStack(Material.BARRIER),
-            prev = new ItemStack(Material.BLUE_WOOL),
-            next = new ItemStack(Material.YELLOW_WOOL);
+            prev = new ItemStack(Material.REDSTONE_BLOCK),
+            next = new ItemStack(Material.IRON_BLOCK);
 
         chest.fill(bluePane, bluePaneSlots);
         chest.fill(close, closeSlot);

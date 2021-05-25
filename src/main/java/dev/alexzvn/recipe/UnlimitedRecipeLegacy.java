@@ -11,13 +11,13 @@ import dev.alexzvn.recipe.listeners.InventoryListener;
 import dev.alexzvn.recipe.recipe.RecipeManager;
 
 /**
- * UnlimitedRecipe
+ * UnlimitedRecipeLegacy
  */
-public class UnlimitedRecipe extends JavaPlugin {
+public class UnlimitedRecipeLegacy extends JavaPlugin {
 
     final public static String version = "0.0.1";
 
-    protected static UnlimitedRecipe instance;
+    protected static UnlimitedRecipeLegacy instance;
 
     protected RecipeManager recipeManager;
 
@@ -73,7 +73,7 @@ public class UnlimitedRecipe extends JavaPlugin {
         }
     }
 
-    public static UnlimitedRecipe getInstance() {
+    public static UnlimitedRecipeLegacy getInstance() {
         return instance;
     }
 }

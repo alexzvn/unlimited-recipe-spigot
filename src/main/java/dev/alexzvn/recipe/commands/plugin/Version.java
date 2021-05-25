@@ -3,7 +3,7 @@ package dev.alexzvn.recipe.commands.plugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import dev.alexzvn.recipe.UnlimitedRecipe;
+import dev.alexzvn.recipe.UnlimitedRecipeLegacy;
 import dev.alexzvn.recipe.commands.BaseCommand;
 import dev.alexzvn.recipe.helper.Config;
 import dev.alexzvn.recipe.helper.Util;
@@ -15,7 +15,7 @@ public class Version extends BaseCommand {
 
         sender.sendMessage(Util.color(
             Config.getString("message_prefix") +
-            "&2Plugin version &6" + UnlimitedRecipe.version
+            "&2Plugin version &6" + UnlimitedRecipeLegacy.version
         ));
 
         return true;

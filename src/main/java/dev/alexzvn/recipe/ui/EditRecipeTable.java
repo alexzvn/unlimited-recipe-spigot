@@ -30,7 +30,7 @@ public class EditRecipeTable extends NewRecipeTable {
         super.createUI();
 
         ItemStack barrier = new ItemStack(Material.BARRIER);
-        ItemStack workbench = new ItemStack(Material.CRAFTING_TABLE);
+        ItemStack workbench = new ItemStack(Material.WORKBENCH);
 
         Item.setName(barrier, "Xóa");
         Item.setName(workbench, "Quay lại");
