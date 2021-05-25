@@ -7,16 +7,35 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import dev.alexzvn.recipe.commands.BaseCommand;
+import dev.alexzvn.recipe.helper.Util;
 import dev.alexzvn.recipe.recipe.RecipeManager;
 
 public class Delete extends BaseCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (! validateSender(sender)) {
+            return false;
+        }
 
+        if (args.length < 1) {
+            alertInvalidCommand(sender);
+            return false;
+        }
 
+        String recipe = args[0];
+        RecipeManager manager = RecipeManager.getInstance();
 
-        return false;
+        if (! manager.getMapRecipe().containsKey(recipe)) {
+            sender.sendMessage(Util.color("&e Recipe đã có trong hệ thống"));
+            return false;
+        }
+
+        manager.remove(recipe);
+
+        sender.sendMessage(Util.color("&a Đã xoá thành công " + recipe));
+
+        return true;
     }
 
     @Override
