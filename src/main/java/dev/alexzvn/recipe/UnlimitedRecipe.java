@@ -15,7 +15,7 @@ import dev.alexzvn.recipe.recipe.RecipeManager;
  */
 public class UnlimitedRecipe extends JavaPlugin {
 
-    final public static String version = "1.0.0";
+    final public static String version = "0.0.1";
 
     protected static UnlimitedRecipe instance;
 
