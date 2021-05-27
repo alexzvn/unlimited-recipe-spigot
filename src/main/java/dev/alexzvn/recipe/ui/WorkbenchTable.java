@@ -84,7 +84,7 @@ public class WorkbenchTable extends Table {
         }
 
         if (craftSlot.contains(clicked)) {
-            Util.dispatchDelay(new FindRecipeWorkbenchTask(chest), 1); return;
+            Util.dispatchDelay(new FindRecipeWorkbenchTask(chest), 3); return;
         }
 
         Recipe recipe = RecipeManager.getInstance().find(chest.rageMatrixItemStack(craftSlot));
