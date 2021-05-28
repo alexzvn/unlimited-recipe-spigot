@@ -29,6 +29,6 @@ public class Item extends BaseCommand {
 
     @Override
     protected String permission() {
-        return "";
+        return null;
     }
 }
