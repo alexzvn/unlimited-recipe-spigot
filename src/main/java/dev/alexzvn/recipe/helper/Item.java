@@ -1,5 +1,8 @@
 package dev.alexzvn.recipe.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,6 +16,20 @@ public class Item {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Util.color(title));
+
+        item.setItemMeta(meta);
+    }
+
+    public static void setLore(ItemStack item, List<String> lore) {
+        ItemMeta meta = item.getItemMeta();
+
+        List<String> colored = new ArrayList<String>();
+
+        for (String line : lore) {
+            colored.add(Util.color(line));
+        }
+
+        meta.setLore(colored);
 
         item.setItemMeta(meta);
     }
