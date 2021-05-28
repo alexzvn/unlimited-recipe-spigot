@@ -1,4 +1,12 @@
 
+categories:
+
+  default:
+    name: '&lDefault'
+    material: 'BELL'  # See all material at https://helpch.at/docs/1.14/org/bukkit/Material.html
+    lore:
+      - "this &ais%r default category"
+
 message_prefix: "[&6&lUnlimitedRecipe&r] "
 
 message:
