@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import dev.alexzvn.recipe.contracts.CommandContract;
 import dev.alexzvn.recipe.helper.Config;
+import dev.alexzvn.recipe.helper.Util;
 
 abstract public class BaseCommand implements CommandContract, CommandExecutor {
 
@@ -29,6 +30,10 @@ abstract public class BaseCommand implements CommandContract, CommandExecutor {
 
     protected boolean hasPermission(CommandSender sender) {
         return permission() != null && sender.hasPermission(permission());
+    }
+
+    protected void alert(CommandSender sender, String message) {
+        sender.sendMessage(Util.color(message));
     }
 
     protected void alertInvalidCommand(CommandSender sender) {
