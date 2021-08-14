@@ -16,14 +16,14 @@ abstract public class Table {
     }
 
     public Table() {
-        createUI();
+        chest = createUI();
     }
 
     public Inventory getInventory() {
         return chest.getInventory();
     }
 
-    public void createUI() {};
+    public Chest createUI() { return null; }
 
     public static boolean isCurrentInventory(int slot, int rawSlot) {
         return slot == rawSlot;
@@ -35,5 +35,9 @@ abstract public class Table {
 
     protected static ItemStack[] recipeItems() {
         return RecipeManager.getInstance().getNamedRecipes();
+    }
+
+    public Chest getChest() {
+        return chest;
     }
 }

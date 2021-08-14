@@ -16,9 +16,8 @@ import dev.alexzvn.recipe.helper.Location;
 import dev.alexzvn.recipe.helper.Util;
 import dev.alexzvn.recipe.recipe.Recipe;
 import dev.alexzvn.recipe.recipe.RecipeManager;
-import dev.alexzvn.recipe.task.workbench.FindRecipeWorkbenchTask;
+import dev.alexzvn.recipe.recipe.ReturnItem;
 import dev.alexzvn.recipe.task.workbench.SetDealWorkbenchTask;
-
 public class WorkbenchTable extends Table {
 
     final public static String name = "Bàn chế tạo";
@@ -35,8 +34,9 @@ public class WorkbenchTable extends Table {
 
     final public static Location guideSlot           = new Location(5, 6);
 
-    public void createUI() {
-        chest = new Chest(Bukkit.createInventory(null, 6*9, name));
+    @Override
+    public Chest createUI() {
+        Chest chest = new Chest(Bukkit.createInventory(null, 6*9, name));
 
         ItemStack blackPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE),
             yellowPane = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE),
@@ -55,6 +55,8 @@ public class WorkbenchTable extends Table {
         // Fill Special item
         chest.fill(arrow, arrowSlot);
         chest.fill(book, guideSlot);
+
+        return chest;
     }
 
     public static void handleClickEvent(InventoryClickEvent event) {
@@ -63,19 +65,18 @@ public class WorkbenchTable extends Table {
         Location clicked = Chest.indexToCoordinate(event.getSlot());
         Player player = Util.humanToPlayer(event.getWhoClicked());
 
-        if (event.getView().getTitle() == name && event.getClick().equals(ClickType.DOUBLE_CLICK)) {
-            event.setCancelled(true);
+        if (event.getView().getTitle() != name) return;
+
+        if (event.getClick().equals(ClickType.DOUBLE_CLICK)) {
+            chest.fill(Util.airItem(), recipeSlot);
         }
 
-        Boolean shouldIgnoreEvent = event.getView().getTitle() != name ||
-            event.getSlot() != event.getRawSlot();
+        if (! isCurrentInventory(event)) return;
 
-        if (shouldIgnoreEvent) return;
-
-        boolean shouldCancelEvent = (recipeSlot.isNot(clicked) && craftSlot.notContains(clicked)) ||
-            (recipeSlot.is(clicked) && ! Util.isAirItem(event.getCursor()));
-
-        if (shouldCancelEvent) event.setCancelled(true);
+        event.setCancelled(
+            (recipeSlot.isNot(clicked) && craftSlot.notContains(clicked)) ||
+            (recipeSlot.is(clicked) && ! Util.isAirItem(event.getCursor()))
+        );
 
         if (guideSlot.is(clicked)) {
             player.closeInventory();
@@ -84,22 +85,69 @@ public class WorkbenchTable extends Table {
         }
 
         if (craftSlot.contains(clicked)) {
-            Util.dispatchDelay(new FindRecipeWorkbenchTask(chest), 3); return;
+            Util.debug("CRAFT");
+            onCrafting(chest, clicked, event); return;
         }
 
-        Recipe recipe = RecipeManager.getInstance().find(chest.rageMatrixItemStack(craftSlot));
-        if (recipeSlot.is(clicked) && recipe != null) {
-            Boolean stack = event.isShiftClick() && event.isLeftClick();
-
-            Util.dispatchDelay(
-                new SetDealWorkbenchTask(recipe, chest, player, stack), 1
-            );
-
-            return;
+        if (recipeSlot.is(clicked)) {
+            Util.debug("GETING");
+            onGetting(chest, player, event); return;
         }
     }
 
+    protected static void onCrafting(Chest chest, Location clicked, InventoryClickEvent event) {
+        ItemStack cursor = Util.isAirItem(event.getCursor()) ? Util.airItem() : event.getCursor().clone();
+        ItemStack current = Util.isAirItem(event.getCurrentItem()) ? Util.airItem() : event.getCurrentItem().clone();
+
+        Chest newUI = new WorkbenchTable().getChest();
+
+        chest.fill(cursor, clicked);
+
+        Recipe recipe = RecipeManager.getInstance().find(
+            chest.rageMatrixItemStack(craftSlot)
+        );
+
+        chest.fill(current, clicked);
+
+        if (recipe != null && !ClickType.DOUBLE_CLICK.equals(event.getClick())) {
+            newUI.fill(recipe.getRecipe(), recipeSlot);
+        } else {
+            newUI.fill(Util.airItem(), recipeSlot);
+        }
+
+        newUI.matrixFill(chest.rageMatrixItemStack(craftSlot), craftSlot.a);
+
+        chest.clear();
+
+        Util.humanToPlayer(event.getWhoClicked()).openInventory(newUI.getInventory());
+    }
+
+    protected static void onGetting(Chest chest, Player player, InventoryClickEvent event) {
+        Chest  newUI  = new WorkbenchTable().getChest();
+        Recipe recipe = RecipeManager.getInstance().find(chest.rageMatrixItemStack(craftSlot));
+        ReturnItem returnItem;
+
+        if (recipe == null) return;
+
+        SetDealWorkbenchTask deal = new SetDealWorkbenchTask(recipe);
+
+        ItemStack[][] craft = chest.rageMatrixItemStack(craftSlot);
+
+        if (event.getClick().equals(ClickType.SHIFT_LEFT)) {
+            returnItem = deal.dealStack(craft);
+            Util.sendPlayerItems(returnItem.recipe, player);
+        } else {
+            returnItem = deal.dealSingle(craft);
+        }
+
+        newUI.matrixFill(returnItem.craft, craftSlot.a);
+
+        player.openInventory(newUI.getInventory());
+    }
+
     public static void handleCloseEvent(InventoryCloseEvent event) {
+        if (event.getView().getTitle() == "ignore") return;
+
         Inventory inv = event.getInventory();
         Player player = Bukkit.getPlayer(event.getPlayer().getName());
 
@@ -112,6 +160,4 @@ public class WorkbenchTable extends Table {
 
         Util.sendPlayerItems(chest.rageMatrixItemStack(craftSlot), player);
     }
-
-    
 }

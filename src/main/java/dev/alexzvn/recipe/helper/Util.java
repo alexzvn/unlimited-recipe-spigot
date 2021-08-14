@@ -13,6 +13,7 @@ import com.google.common.io.Files;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -165,6 +166,12 @@ public class Util {
         return Bukkit.getPlayer(human.getName());
     }
 
+    public static void dropItem(ItemStack item, Location location) {
+        if (isAirItem(item)) return;
+
+        location.getWorld().dropItemNaturally(location, item);
+    }
+
     public static void sendPlayerItem(ItemStack item, Player player) {
         if (isAirItem(item)) return;
 
@@ -174,7 +181,7 @@ public class Util {
             inv.addItem(item); return;
         }
 
-        player.getWorld().dropItemNaturally(player.getLocation(), item);
+        dropItem(item, player.getLocation());
     }
 
     public static void sendPlayerItems(List<ItemStack> items, Player player) {

@@ -18,3 +18,4 @@ permissions:
       recipe.admin.edit: true
       recipe.admin.delete: true
       recipe.admin.create: true
+      recipe.admin.category: true

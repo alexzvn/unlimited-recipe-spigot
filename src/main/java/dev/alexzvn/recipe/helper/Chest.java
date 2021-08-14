@@ -25,6 +25,26 @@ public class Chest {
         return rangeMatrixItemStack(l.a.x, l.a.y, l.b.x, l.b.y);
     }
 
+    public ItemStack[][] matrixClone(CoupleLocation l) {
+        ItemStack[][] items = new ItemStack[Math.abs(l.a.y - l.b.y) + 1][];
+
+        int[][] matrixIndexs = rangeToMatrixIndexs(l.a.x, l.a.y, l.b.x, l.b.y);
+
+        for (int y = 0; y < matrixIndexs.length; y++) {
+            ItemStack[] row = new ItemStack[Math.abs(l.a.x - l.b.x) + 1];
+
+            for (int x = 0; x < matrixIndexs[y].length; x++) {
+                ItemStack item = slot(matrixIndexs[y][x]);
+
+                row[x] = Util.isAirItem(item) ? Util.airItem() : item.clone();
+            }
+
+            items[y] = row;
+        }
+
+        return items;
+    }
+
     public ItemStack[][] rangeMatrixItemStack(int x1, int y1, int x2, int y2) {
         ItemStack[][] items = new ItemStack[Math.abs(y1 - y2) + 1][];
 
@@ -109,6 +129,10 @@ public class Chest {
 
     public void clear(Location location) {
         inv.clear(coordinateToIndex(location.x, location.y));
+    }
+
+    public void clear() {
+        inv.clear();
     }
 
     public void clear(CoupleLocation location) {

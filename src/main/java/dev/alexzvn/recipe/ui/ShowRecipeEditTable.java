@@ -34,8 +34,8 @@ public class ShowRecipeEditTable extends Table {
     final static public int itemSize = recipeSlots.acreSquare();
 
     @Override
-    public void createUI() {
-        chest = new Chest(Bukkit.createInventory(null, 6*9, name));
+    public Chest createUI() {
+        Chest chest = new Chest(Bukkit.createInventory(null, 6*9, name));
 
         ItemStack bluePane = new ItemStack(Material.BLUE_STAINED_GLASS_PANE),
             close = new ItemStack(Material.BARRIER),
@@ -48,6 +48,8 @@ public class ShowRecipeEditTable extends Table {
         chest.fill(next, nextSlot);
 
         new PaginationItem(chest, 0).run();
+
+        return chest;
     }
 
     public static void handleClickEvent(InventoryClickEvent event) {

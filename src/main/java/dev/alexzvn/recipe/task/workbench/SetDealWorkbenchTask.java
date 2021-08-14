@@ -1,59 +1,38 @@
 package dev.alexzvn.recipe.task.workbench;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import dev.alexzvn.recipe.helper.Chest;
-import dev.alexzvn.recipe.helper.Util;
 import dev.alexzvn.recipe.recipe.Recipe;
-import dev.alexzvn.recipe.ui.WorkbenchTable;
+import dev.alexzvn.recipe.recipe.ReturnItem;
 
-public class SetDealWorkbenchTask implements Runnable {
+public class SetDealWorkbenchTask {
     protected Recipe recipe;
-    protected Chest chest;
-    protected Player player;
-    protected boolean stack;
 
-    public SetDealWorkbenchTask(Recipe recipe, Chest chest, Player player, boolean stack) {
+    public SetDealWorkbenchTask(Recipe recipe) {
         this.recipe = recipe;
-        this.chest = chest;
-        this.player = player;
-        this.stack = stack;
     }
 
-    @Override
-    public void run() {
+    public ReturnItem dealSingle(ItemStack[][] craft) {
+        ReturnItem returnItem = new ReturnItem();
 
-        ItemStack[][] craft = chest.rageMatrixItemStack(WorkbenchTable.craftSlot);
+        if (! recipe.canDeal(craft)) return returnItem;
 
-        craft = stack ? dealStack(craft) : dealSingle(craft);
-
-        chest.matrixFill(craft, WorkbenchTable.craftSlot.a);
-    }
-
-    protected ItemStack[][] dealSingle(ItemStack[][] craft) {
-        if (! recipe.canDeal(craft)) return craft;
-
-        craft = recipe.deal(craft);
-
-        if (! recipe.canDeal(craft)) {
-            chest.clear(WorkbenchTable.recipeSlot);
-        } else {
-            chest.fill(recipe.getRecipe(), WorkbenchTable.recipeSlot);
+        if (recipe.canDeal(craft)) {
+            returnItem.craft = recipe.deal(craft);
+            returnItem.recipe.add(recipe.getRecipe());
         }
 
-        return craft;
+        return returnItem;
     }
 
-    protected ItemStack[][] dealStack(ItemStack[][] craft) {
+    public ReturnItem dealStack(ItemStack[][] craft) {
+        ReturnItem returnItem = new ReturnItem();
 
         while (recipe.canDeal(craft)) {
-            craft = recipe.deal(craft);
-            Util.sendPlayerItem(recipe.getRecipe(), player);
+            returnItem.craft = recipe.deal(craft);
+            returnItem.recipe.add(recipe.getRecipe());
         }
 
-        chest.clear(WorkbenchTable.recipeSlot);
-
-        return craft;
+        return returnItem;
     }
 }

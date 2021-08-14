@@ -3,6 +3,7 @@ package dev.alexzvn.recipe.helper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,8 +23,8 @@ public class Category {
         return items;
     }
 
-    public static List<String> keys() {
-        return config.getStringList("categories");
+    public static Set<String> keys() {
+        return config.getConfigurationSection("categories").getKeys(false);
     }
 
     public static boolean hasAny() {

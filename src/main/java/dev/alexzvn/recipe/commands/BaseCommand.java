@@ -29,7 +29,11 @@ abstract public class BaseCommand implements CommandContract, CommandExecutor {
     }
 
     protected boolean hasPermission(CommandSender sender) {
-        return permission() != null && sender.hasPermission(permission());
+        if (permission() == null) {
+            return true;
+        }
+
+        return permission() == "" || sender.hasPermission(permission());
     }
 
     protected void alert(CommandSender sender, String message) {

@@ -44,8 +44,8 @@ public class ListRecipeTable extends Table {
     final static public int itemSize = itemSlots.acreSquare();
 
     @Override
-    public void createUI() {
-        chest = new Chest(Bukkit.createInventory(null, 9*6, name));
+    public Chest createUI() {
+        Chest chest = new Chest(Bukkit.createInventory(null, 9*6, name));
 
         ItemStack blackPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE),
             yellowPane = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE),
@@ -64,6 +64,8 @@ public class ListRecipeTable extends Table {
         chest.fill(barrier, closeSlot);
 
         Util.dispatch(new PaginationItemTable(chest, 0));
+
+        return chest;
     }
 
     public static boolean isClickedFunction(Location location) {
